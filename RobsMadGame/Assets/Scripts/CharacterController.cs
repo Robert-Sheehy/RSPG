@@ -10,11 +10,15 @@ public class CharacterController : MonoBehaviour
     private float turning_speed = 90;
     private float mouse_sensitivity_x = 180;
     Animator char_animation;
+
+    PlayerCameraScript my_camera;
     // Start is called before the first frame update
     void Start()
     {
         current_speed = WALKING_SPEED;
         char_animation = GetComponentInChildren<Animator>();
+        my_camera = GetComponentInChildren<PlayerCameraScript>();
+        my_camera.you_belong_to(this);
     }
 
     // Update is called once per frame
@@ -29,8 +33,14 @@ public class CharacterController : MonoBehaviour
         if (should_turn_left()) turn_left();
 
        turn(Input.GetAxis("Horizontal"));
+        adjust_camera(Input.GetAxis("Vertical"));
 
         
+    }
+
+    private void adjust_camera(float vertical_adjustment)
+    {
+        my_camera.adjust_vertical_angle(vertical_adjustment);
     }
 
     private void turn(float mouse_turn_value_x)
